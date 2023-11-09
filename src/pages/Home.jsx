@@ -1,11 +1,8 @@
-import { Link } from "react-router-dom";
-import ImageGenerator from '../components/GenerateImage'
+  
+import Layout  from "../components/Layout";
 function Home() {
   return (
-    <div>
-      <h1>This is the home page</h1>
-      <ImageGenerator/>
-    </div>
+    <Layout/>
   );
 }
 
