@@ -1,19 +1,32 @@
 import React, { useRef } from "react";
 import { Box, Flex, Button } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
 import * as markerjs2 from "markerjs2";
+import { updateAnnotatedImage } from "../features/generatedImages/generatedImagesSlice";
 
-const MainArea = ({ selectedImage }) => {
+const MainArea = () => {
   const imgRef = useRef();
+  const dispatch = useDispatch();
+
+  // Assuming you have a slice for selectedImage
+  const selectedImage = useSelector((state) => state.selectedImage.imageUrl);
+
+  // Assuming you have a slice for generatedImages
+  const generatedImages = useSelector((state) => state.generatedImages.images);
 
   const showMarkerArea = () => {
     if (imgRef.current) {
+      // Find the index of the selectedImage in the generatedImages array
+      const indexOfSelectedImage = generatedImages.indexOf(selectedImage);
+
       // Create a marker.js MarkerArea
       const markerArea = new markerjs2.MarkerArea(imgRef.current);
 
       // Attach an event handler to assign annotated image back to our image element
       markerArea.addEventListener("render", (event) => {
         if (imgRef.current) {
-          imgRef.current.src = event.dataUrl;
+          // Dispatch the action to update the annotated image in the Redux state
+          dispatch(updateAnnotatedImage({ index: indexOfSelectedImage, image: event.dataUrl }));
         }
       });
 
@@ -23,8 +36,6 @@ const MainArea = ({ selectedImage }) => {
   };
 
   const handleDownload = () => {
-    // Implement download logic here
-    // You can use the "download" attribute for links or create a Blob and trigger a download
     if (imgRef.current) {
       const imageDataURL = imgRef.current.src;
       console.log(imageDataURL);

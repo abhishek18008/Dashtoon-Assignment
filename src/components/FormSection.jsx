@@ -1,31 +1,21 @@
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Button,
-  Text,
-  Textarea,
-  Image,
-  Spinner, // Import Spinner component from Chakra UI
-} from "@chakra-ui/react";
-import { useState } from "react";
+// src/components/FormSection.js
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Box, FormControl, FormLabel, Button, Text, Textarea, Spinner } from "@chakra-ui/react";
+import { addImage } from '../features/generatedImages/generatedImagesSlice';
 
 const API_TOKEN = "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";
-// const API_TOKEN = "VknySbLLTUjbxXAXCjyfaFIPwUTCeRXbFSOjwRiCxsxFyhbnGjSFalPKrpvvDAaPVzWEevPljilLVDBiTzfIbWFdxOkYJxnOPoHhkkVGzAknaOulWggusSFewzpqsNWM";
 
-function FormSection({ addImage }) {
+function FormSection() {
+  const dispatch = useDispatch();
   const [inputData, setInputData] = useState({});
-
-  const [generatedImage, setGeneratedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   async function query(data) {
-    //console.log("Data received is", data);
     try {
       const response = await fetch(
         "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4",
-        // "https://xdwvg9no7pefghrn.us-east-1.aws.endpoints.huggingface.cloud",
         {
           headers: {
             Accept: "image/png",
@@ -41,7 +31,7 @@ function FormSection({ addImage }) {
       }
 
       const res = await response.blob();
-      return URL.createObjectURL(res); 
+      return URL.createObjectURL(res);
     } catch (error) {
       throw error;
     }
@@ -54,8 +44,9 @@ function FormSection({ addImage }) {
 
     try {
       const imageURL = await query({ inputs: inputData.text });
-      setGeneratedImage(imageURL);
-      addImage(imageURL);
+      localStorage.setItem('Image', imageURL);
+      // Use Redux action to add generated image to the store
+      dispatch(addImage(imageURL));
     } catch (error) {
       setError("An error occurred while generating the image.");
     } finally {
@@ -90,8 +81,6 @@ function FormSection({ addImage }) {
 
         {error && <Text color="red.500">{error}</Text>}
       </form>
-
-      {/*  */}
     </Box>
   );
 }

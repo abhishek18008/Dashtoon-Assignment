@@ -12,6 +12,12 @@ function Layout() {
     setGeneratedImages([...generatedImages, imageData]);
   };
 
+  const updateImage = (index, updatedImageData) => {
+    const updatedImages = [...generatedImages];
+    updatedImages[index] = updatedImageData;
+    setGeneratedImages(updatedImages);
+  };
+
   const handleImageSelect = (image) => {
     setSelectedImage(image);
   };
@@ -24,17 +30,15 @@ function Layout() {
       </Box>
 
       <Flex flex="1" flexDirection="column">
-        {/* Top Bar with Generated Images */}
         <Box bg="blue.500" height="200px">
-          <TopBar
-            generatedImages={generatedImages}
-            onSelectImage={handleImageSelect}
-          />
+          <TopBar/>
         </Box>
 
         {/* Main Area with Selected Image */}
         <Flex flex="1">
-          <MainArea selectedImage={selectedImage} />
+          <MainArea selectedImage={selectedImage} 
+          generatedImages={generatedImages}
+          updateImage={updateImage} />
         </Flex>
       </Flex>
     </Flex>

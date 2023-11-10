@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import { Flex, Image, Box } from "@chakra-ui/react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Flex, Box, Image } from "@chakra-ui/react";
+import { selectImage } from "../features/selectedImage/selectedImageSlice"; // Import your Redux action
 
-const TopBar = ({ generatedImages, onSelectImage }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+const TopBar = () => {
+  const dispatch = useDispatch();
+  const generatedImages = useSelector((state) => state.generatedImages.images); // Update with your generated images slice name
+
+  const selectedImageIndex = useSelector((state) => state.selectedImage.index);
 
   const handleImageClick = (index) => {
-    onSelectImage(generatedImages[index]);
-    setSelectedImageIndex(index);
+    dispatch(selectImage({ index, imageUrl: generatedImages[index] }));
   };
 
   return (
