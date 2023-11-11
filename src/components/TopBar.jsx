@@ -3,7 +3,6 @@ import React from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { selectImage } from "../features/selectedImage/selectedImageSlice";
 import { removeImage } from "../features/generatedImages/generatedImagesSlice";
-
 import { useDispatch, useSelector } from "react-redux";
 
 const TopBar = () => {
@@ -18,9 +17,8 @@ const TopBar = () => {
   const handleRemoveClick = (index) => {
     dispatch(removeImage(index));
   };
- 
   return (
-    <Box width={"100%"} bgColor={"blue"}>
+    <Box width={"100%"} bgColor={"silver"}>
         <Box display="flex" height="max-content" style={{ overflowX: "auto" }}>
           {images.map((url, index) => (
             <Box

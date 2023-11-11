@@ -9,9 +9,13 @@ const selectedImageSlice = createSlice({
       state.index = action.payload.index;
       state.imageUrl = action.payload.imageUrl;
     },
+    clearSelectedImage: (state) => {
+      state.index = null;
+      state.imageUrl = null;
+    },
   },
 });
 
-export const { selectImage } = selectedImageSlice.actions;
+export const { selectImage ,clearSelectedImage} = selectedImageSlice.actions;
 
 export default selectedImageSlice.reducer;
