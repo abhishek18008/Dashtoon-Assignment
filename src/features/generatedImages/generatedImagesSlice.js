@@ -1,4 +1,3 @@
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -16,10 +15,14 @@ const generatedImagesSlice = createSlice({
       const { index, image } = action.payload;
       state.images[index] = image;
     },
+    removeImage: (state, action) => {
+      const indexToRemove = action.payload;
+      state.images.splice(indexToRemove, 1);
+    },
     // Add other reducers as needed
   },
 });
 
-export const { addImage, updateAnnotatedImage } = generatedImagesSlice.actions;
+export const { addImage, updateAnnotatedImage, removeImage } = generatedImagesSlice.actions;
 
 export default generatedImagesSlice.reducer;

@@ -55,7 +55,7 @@ function FormSection() {
   };
 
   return (
-    <Box p="4">
+    <Box p="4" maxWidth={'300px'} minWidth={"300px"}>
       <form onSubmit={handleSubmit}>
         <FormControl>
           <FormLabel htmlFor="text">Text</FormLabel>

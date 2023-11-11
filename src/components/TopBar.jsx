@@ -1,34 +1,56 @@
+
 import React from "react";
+import { Box, Button } from "@chakra-ui/react";
+import { selectImage } from "../features/selectedImage/selectedImageSlice";
+import { removeImage } from "../features/generatedImages/generatedImagesSlice";
+
 import { useDispatch, useSelector } from "react-redux";
-import { Flex, Box, Image } from "@chakra-ui/react";
-import { selectImage } from "../features/selectedImage/selectedImageSlice"; // Import your Redux action
 
 const TopBar = () => {
   const dispatch = useDispatch();
-  const generatedImages = useSelector((state) => state.generatedImages.images); // Update with your generated images slice name
-
+  const images = useSelector((state) => state.generatedImages.images); 
   const selectedImageIndex = useSelector((state) => state.selectedImage.index);
-
+  
   const handleImageClick = (index) => {
-    dispatch(selectImage({ index, imageUrl: generatedImages[index] }));
+    dispatch(selectImage({ index, imageUrl: images[index] }));
   };
 
+  const handleRemoveClick = (index) => {
+    dispatch(removeImage(index));
+  };
+ 
   return (
-    <Flex flexWrap="wrap" justifyContent="center" alignItems="center" gap={4}>
-      {generatedImages.map((image, index) => (
-        <Box
-          key={index}
-          width="200px"
-          border={selectedImageIndex === index ? "2px solid blue" : "none"}
-          borderRadius="md"
-          cursor="pointer"
-          onClick={() => handleImageClick(index)}
-        >
-          <Image src={image} alt={`Generated Image ${index}`} />
+    <Box width={"100%"} bgColor={"blue"}>
+        <Box display="flex" height="max-content" style={{ overflowX: "auto" }}>
+          {images.map((url, index) => (
+            <Box
+              key={index}
+              marginRight="2"
+              style={{
+                minHeight: "220px",
+                aspectRatio: "1",
+                maxHeight: "220px",
+                cursor: "pointer",
+                border: index === selectedImageIndex ? "2px solid red" : "none",
+              }}
+              onClick={() => handleImageClick(index)}
+            >
+              <img
+                src={url}
+                alt={`Image ${index + 1}`}
+              />
+              <Button onClick={() => handleRemoveClick(index)}>Remove</Button>
+            </Box>
+          ))}
         </Box>
-      ))}
-    </Flex>
+    </Box>
   );
 };
 
 export default TopBar;
+
+
+
+
+
+

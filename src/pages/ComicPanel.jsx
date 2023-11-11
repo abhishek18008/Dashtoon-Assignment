@@ -1,8 +1,10 @@
 import React from "react";
-import { Box, Grid, Image, Text, Flex } from "@chakra-ui/react";
+import { Box, Grid, Image, Text, Flex, Heading } from "@chakra-ui/react";
 
 const ComicPanel = ({ comicImages }) => {
   return (
+    <>
+    <Heading>this is comic panel</Heading>
     <Grid templateColumns="repeat(5, 1fr)" gap={4} p={4}>
       {comicImages.map((image, index) => (
         <Box key={index} boxShadow="lg" borderRadius="md" overflow="hidden">
@@ -14,6 +16,7 @@ const ComicPanel = ({ comicImages }) => {
         </Box>
       ))}
     </Grid>
+    </>
   );
 };
 

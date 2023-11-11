@@ -1,44 +1,25 @@
-import React, { useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import React from "react";
+import { Flex, Box } from "@chakra-ui/react";
 import FormSection from "./FormSection";
 import TopBar from "./TopBar";
 import MainArea from "./MainArea";
 
 function Layout() {
-  const [generatedImages, setGeneratedImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const addImage = (imageData) => {
-    setGeneratedImages([...generatedImages, imageData]);
-  };
-
-  const updateImage = (index, updatedImageData) => {
-    const updatedImages = [...generatedImages];
-    updatedImages[index] = updatedImageData;
-    setGeneratedImages(updatedImages);
-  };
-
-  const handleImageSelect = (image) => {
-    setSelectedImage(image);
-  };
-
   return (
-    <Flex height="100vh">
-      {/* Right Sidebar */}
-      <Box width="300px" bg="gray.200">
-        <FormSection addImage={addImage} />
-      </Box>
+    <Flex height="91vh">
+      {/* Sidebar/Form Section */}
+        <FormSection />
 
-      <Flex flex="1" flexDirection="column">
-        <Box bg="blue.500" height="200px">
-          <TopBar/>
-        </Box>
+      
+      <Flex flex="1" flexDirection="column" width={"100%"}>
+        {/* Top Bar */}
+        {/* <Box bg="blue.500" height="250px"> */}
+          <TopBar />
+        {/* </Box> */}
 
-        {/* Main Area with Selected Image */}
-        <Flex flex="1">
-          <MainArea selectedImage={selectedImage} 
-          generatedImages={generatedImages}
-          updateImage={updateImage} />
+        {/* Main Area */}
+        <Flex flex="1" p="4">
+          <MainArea />
         </Flex>
       </Flex>
     </Flex>

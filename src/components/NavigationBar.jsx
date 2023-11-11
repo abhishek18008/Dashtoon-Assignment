@@ -97,8 +97,6 @@ export default function Simple() {
           </Box>
         ) : null}
       </Box>
-
-      <Box p={4}></Box>
     </>
   );
 }
