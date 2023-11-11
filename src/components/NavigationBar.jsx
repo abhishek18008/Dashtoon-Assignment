@@ -5,7 +5,7 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
 const Links = [
   { text: "Home", to: "/" },
-  { text: "ComicPanel", to: "/ComicPanel" },
+  { text: "ComicPanel", to: "/comicpanel" },
   { text: "About", to: "/about" },
   { text: "Contact", to: "/contact" },
   { text: "Explore", to: "/explore" },
