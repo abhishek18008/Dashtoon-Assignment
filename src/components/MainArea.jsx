@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-import { Box, Flex, Button } from "@chakra-ui/react";
+import { Box, Flex, Button, Tooltip, Icon } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+import { FaPencilAlt, FaDownload, FaTrashAlt } from "react-icons/fa"; // Importing icons
 import * as markerjs2 from "markerjs2";
 import { updateAnnotatedImage } from "../features/generatedImages/generatedImagesSlice";
-import { clearSelectedImage } from "../features/selectedImage/selectedImageSlice";
+import { selectImage,clearSelectedImage } from "../features/selectedImage/selectedImageSlice";
 
 const MainArea = () => {
   const imgRef = useRef();
@@ -13,24 +14,22 @@ const MainArea = () => {
 
   const showMarkerArea = () => {
     if (imgRef.current) {
-      // Find the index of the selectedImage in the generatedImages array
       const indexOfSelectedImage = generatedImages.indexOf(selectedImage);
-
-      // Create a marker.js MarkerArea
       const markerArea = new markerjs2.MarkerArea(imgRef.current);
       markerArea.settings.displayMode = "popup";
 
-      // Attach an event handler to assign annotated image back to our image element
       markerArea.addEventListener("render", (event) => {
         if (imgRef.current) {
-          // Dispatch the action to update the annotated image in the Redux state
+          const annotatedImage = event.dataUrl;
           dispatch(
-            updateAnnotatedImage({ index: indexOfSelectedImage, image: event.dataUrl })
+            updateAnnotatedImage({ index: indexOfSelectedImage, image: annotatedImage })
           );
+
+          // Set the selected image to the annotated image
+          dispatch(selectImage({ index: indexOfSelectedImage, image: annotatedImage }));
         }
       });
 
-      // Launch marker.js
       markerArea.show();
     }
   };
@@ -38,7 +37,6 @@ const MainArea = () => {
   const handleDownload = () => {
     if (imgRef.current) {
       const imageDataURL = imgRef.current.src;
-      console.log(imageDataURL);
       
       const a = document.createElement("a");
       a.href = imageDataURL;
@@ -48,35 +46,68 @@ const MainArea = () => {
   };
 
   const handleClearImage = () => {
-    // Dispatch the action to clear the selected image in the Redux state
     dispatch(clearSelectedImage());
   };
 
   return (
-    <Flex flexDirection="column" alignItems="center" justifyContent="center">
+    <Flex
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      textAlign="center"
+    >
       {selectedImage ? (
-        <>
-          {/* Display selected image */}
-          <Box position="relative">
-            <img
-              ref={imgRef}
-              src={selectedImage}
-              alt="Selected Image"
-              style={{ maxWidth: "100%", height: "auto" }}
+        <Box position="relative" maxWidth="100%">
+          <img
+            ref={imgRef}
+            src={selectedImage}
+            alt="Selected Image"
+            style={{ maxWidth: "100%", height: "auto", margin: "0 auto" }}
+          />
+
+          {/* Edit button */}
+          <Tooltip label="Edit Image" placement="top">
+            <Button
+              mt={2}
               onClick={showMarkerArea}
-            />
-          </Box>
+              colorScheme="teal"
+              position="absolute"
+              top="0"
+              left="50%"
+              transform="translateX(-50%)"
+            >
+              <Icon as={FaPencilAlt} boxSize={5} />
+            </Button>
+          </Tooltip>
 
           {/* Download button */}
-          <Button mt={4} onClick={handleDownload} colorScheme="blue">
-            Download
-          </Button>
+          <Tooltip label="Download Image" placement="top">
+            <Button
+              mt={2}
+              onClick={handleDownload}
+              colorScheme="blue"
+              position="absolute"
+              top="0"
+              right="0"
+            >
+              <Icon as={FaDownload} boxSize={5} />
+            </Button>
+          </Tooltip>
 
           {/* Clear selected image button */}
-          <Button mt={2} onClick={handleClearImage} colorScheme="red">
-            Clear Selected Image
-          </Button>
-        </>
+          <Tooltip label="Clear Image" placement="top">
+            <Button
+              mt={2}
+              onClick={handleClearImage}
+              colorScheme="red"
+              position="absolute"
+              bottom="0"
+              left="50%"
+            >
+              <Icon as={FaTrashAlt} boxSize={5} />
+            </Button>
+          </Tooltip>
+        </Box>
       ) : (
         <Box>No image selected</Box>
       )}

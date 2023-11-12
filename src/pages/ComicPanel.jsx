@@ -1,33 +1,30 @@
 import React, { useState } from "react";
+import { Box, Grid, Image, Heading, Button } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { Box, Grid, Image, Heading } from "@chakra-ui/react";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
 
 const ComicPanel = () => {
-  const comicImages = [
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-    "https://placekitten.com/200/300",
-  ];
+  const comicImages = useSelector((state) => state.generatedImages.images); 
+  // const [comicImages, setComicImages] = useState([
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  //   "https://placekitten.com/200/300",
+  // ]);
 
-  const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const openLightbox = (index) => {
-    setLightboxIndex(index);
-    setLightboxOpen(true);
+  const openLightbox = (image) => {
+    setSelectedImage(image);
   };
 
   const closeLightbox = () => {
-    setLightboxOpen(false);
+    setSelectedImage(null);
   };
 
   return (
@@ -42,8 +39,7 @@ const ComicPanel = () => {
             boxShadow="lg"
             borderRadius="md"
             overflow="hidden"
-            cursor="pointer"
-            onClick={() => openLightbox(index)}
+            position="relative"
           >
             <Image
               src={image}
@@ -51,20 +47,36 @@ const ComicPanel = () => {
               h="200px"
               w="100%"
               objectFit="cover"
+              cursor="pointer"
+              onClick={() => openLightbox(image)}
             />
           </Box>
         ))}
       </Grid>
 
-      {lightboxOpen && (
-        <Lightbox
-          mainSrc={comicImages[lightboxIndex]}
-          nextSrc={comicImages[(lightboxIndex + 1) % comicImages.length]}
-          prevSrc={comicImages[(lightboxIndex + comicImages.length - 1) % comicImages.length]}
-          onCloseRequest={closeLightbox}
-          onMovePrevRequest={() => setLightboxIndex((lightboxIndex + comicImages.length - 1) % comicImages.length)}
-          onMoveNextRequest={() => setLightboxIndex((lightboxIndex + 1) % comicImages.length)}
-        />
+      {selectedImage && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onClick={closeLightbox}
+        >
+          <Image
+            src={selectedImage}
+            alt="Selected Comic Image"
+            maxH="80%"
+            maxW="80%"
+            objectFit="contain"
+          />
+        </div>
       )}
     </>
   );

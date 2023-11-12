@@ -13,7 +13,6 @@ const TopBar = () => {
   const handleImageClick = (index) => {
     dispatch(selectImage({ index, imageUrl: images[index] }));
   };
-
   const handleRemoveClick = (index) => {
     dispatch(removeImage(index));
   };
